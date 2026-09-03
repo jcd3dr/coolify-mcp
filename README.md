@@ -125,6 +125,20 @@ If your Coolify instance sits behind a Cloudflare Access tunnel or other auth-pr
 
 Multiple `--header` flags can be combined. The reserved headers `Authorization` and `Content-Type` are filtered (with a warning) to prevent silently overriding the Coolify bearer token.
 
+### Docker Compose (Self-Hosted / Coolify Deployment)
+
+This repo includes a `docker-compose.yml` for remote deployment with `mcp-proxy`.
+
+```bash
+cp .env.example .env
+docker-compose up -d
+```
+
+Requires `COOLIFY_ACCESS_TOKEN`, `COOLIFY_BASE_URL`, optionally `CF_ACCESS_CLIENT_ID`/`CF_ACCESS_CLIENT_SECRET`, `MCP_SECRET_PATH`.
+
+Coolify service UUID: `isc88g8kww44kcgcok0o8484`, app UUID: `osw0kcckkgggcso8ccgkc0wk`, FQDN: `https://coolify-mcp.jcdcruz.com:8080`.
+
+
 ## Context-Optimized Responses
 
 ### Why This Matters
