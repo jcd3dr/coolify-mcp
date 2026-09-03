@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  coolify-mcp:
+    image: node:22-alpine
+    container_name: coolify-mcp
+    restart: unless-stopped
+    working_dir: /app
+    labels:
+      - coolify.managed=true
+      - coolify.service=isc88g8kww44kcgcok0o8484
+      - coolify.app=osw0kcckkggkcso8ccgkc0wk
+      - coolify.fqdn=https://coolify-mcp.jcdcruz.com:8080
+    environment:
+      - COOLIFY_BASE_URL=${COOLIFY_BASE_URL}
+      - COOLIFY_ACCESS_TOKEN=${COOLIFY_ACCESS_TOKEN}
+      - CF_ACCESS_CLIENT_ID=${CF_ACCESS_CLIENT_ID}
+      - CF_ACCESS_CLIENT_SECRET=${CF_ACCESS_CLIENT_SECRET}
+      - MCP_SECRET_PATH=${MCP_SECRET_PATH:-/app/.mcp-secret}
+    volumes:
+      - ./data:/app/data
+    command: >
+      sh -c "npm install -g @masonator/coolify-mcp@latest mcp-proxy@latest &&
+             mcp-proxy --sse --port 8080 -- npx @masonator/coolify-mcp@latest"
+    networks:
+      - coolify-mcp-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+networks:
+  coolify-mcp-net:
+    driver: bridge
